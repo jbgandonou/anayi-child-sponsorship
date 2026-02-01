@@ -8,15 +8,14 @@ import { DraftModule } from "./draft/draft.module";
 // Helper function to parse DATABASE_URL or use individual variables
 function getDatabaseConfig() {
   if (process.env.DATABASE_URL) {
-    // Parse DATABASE_URL for production (Railway)
-    const url = new URL(process.env.DATABASE_URL);
+    // Use DATABASE_URL directly for Railway
     return {
       type: "postgres" as const,
-      host: url.hostname,
-      port: parseInt(url.port) || 5432,
-      username: url.username,
-      password: url.password,
-      database: url.pathname.slice(1), // Remove leading /
+      url: process.env.DATABASE_URL,
+      entities: [__dirname + "/**/*.entity{.ts,.js}"],
+      synchronize: true,
+      logging: process.env.NODE_ENV === "development",
+      ssl: { rejectUnauthorized: false }, // Railway requires SSL
     };
   }
   // Use individual variables for development
@@ -27,6 +26,9 @@ function getDatabaseConfig() {
     username: process.env.DATABASE_USER || "admin",
     password: process.env.DATABASE_PASSWORD || "admin123",
     database: process.env.DATABASE_NAME || "child_sponsorship",
+    entities: [__dirname + "/**/*.entity{.ts,.js}"],
+    synchronize: true,
+    logging: process.env.NODE_ENV === "development",
   };
 }
 
@@ -37,9 +39,6 @@ function getDatabaseConfig() {
     }),
     TypeOrmModule.forRoot({
       ...getDatabaseConfig(),
-      entities: [__dirname + "/**/*.entity{.ts,.js}"],
-      synchronize: true, // Always sync schema for Railway (safe with managed DB)
-      logging: process.env.NODE_ENV === "development",
     }),
     AuthModule,
     DraftModule,
