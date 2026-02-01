@@ -1,0 +1,14 @@
+{
+    "name": "anayi-child-sponsorship",
+    "version": "1.0.0",
+    "description": "Child Sponsorship Application",
+    "private": true,
+    "scripts": {
+        "build": "cd backend && npm ci && npm run build",
+        "start": "cd backend && npm run start:prod",
+        "dev": "cd backend && npm run start:dev"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}
