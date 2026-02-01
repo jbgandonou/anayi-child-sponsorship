@@ -38,7 +38,7 @@ function getDatabaseConfig() {
     TypeOrmModule.forRoot({
       ...getDatabaseConfig(),
       entities: [__dirname + "/**/*.entity{.ts,.js}"],
-      synchronize: process.env.NODE_ENV !== "production",
+      synchronize: true, // Always sync schema for Railway (safe with managed DB)
       logging: process.env.NODE_ENV === "development",
     }),
     AuthModule,
