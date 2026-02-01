@@ -9,13 +9,19 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // Enable CORS
-  const allowedOrigins = process.env.FRONTEND_URL
-    ? [process.env.FRONTEND_URL, "http://localhost:5173"]
-    : ["http://localhost:5173", "http://localhost:3000"];
+  const allowedOrigins = [
+    process.env.FRONTEND_URL || "http://localhost:5173",
+    "http://localhost:5173",
+    "http://localhost:3000",
+  ].filter(Boolean);
+
+  console.log("🔓 CORS allowed origins:", allowedOrigins);
 
   app.enableCors({
     origin: allowedOrigins,
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   });
 
   // Global validation pipe
