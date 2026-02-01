@@ -34,23 +34,34 @@
 
 2. **Connecter le repo à Railway**
    - Va dans **+ New Service** → **GitHub Repo**
-   - Sélectionne ton repo `anayi-backend`
-   - Railway va détécter automatiquement que c'est un projet Node.js
+   - Sélectionne ton repo qui contient la structure complète (frontend + backend)
+   - Railway va détecter le Dockerfile dans le dossier backend
 
-3. **Configurer les variables d'environnement**
+3. **Configurer le chemin du Dockerfile (IMPORTANT)**
+   - Va dans **Settings** → **Build**
+   - Change le **Dockerfile path** en: `backend/Dockerfile`
+   - Change le **Build context** en: `backend/`
+
+4. **Configurer les variables d'environnement**
    - Va dans **Settings** → **Variables**
+   - Railway crée automatiquement **DATABASE_URL** (ne pas modifier)
    - Ajoute les variables suivantes:
      ```
      NODE_ENV=production
-     JWT_SECRET=genere_une_clé_aléatoire_complexe
+     JWT_SECRET=genere_une_clé_aléatoire_complexe_minimum_32_caracteres
      FRONTEND_URL=https://ton-frontend-vercel.vercel.app
+     PORT=3000
      ```
-   - **DATABASE_URL** est déjà fournie par Railway automatiquement
 
-4. **Déployer**
+5. **Vérifier les logs de déploiement**
+   - Va dans l'onglet **Deploy Logs**
+   - Assure-toi qu'il n'y a pas d'erreur Docker
+   - Vérifie que la migration de la base de données est réussie
+
+6. **Déployer**
    - Railway va automatiquement construire et déployer
    - Attends ~2-3 minutes
-   - Tu verras l'URL de ton backend dans les **Deployments**
+   - Tu verras l'URL de ton backend dans **Settings** → **Domains**
 
 ### Option B: Déploiement Manuel (CLI Railway)
 

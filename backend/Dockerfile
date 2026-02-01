@@ -8,6 +8,10 @@ RUN npm install
 
 COPY . .
 
+# Build the NestJS application
+RUN npm run build
+
 EXPOSE 3000
 
-CMD ["npm", "run", "start:dev"]
+# Use production start command
+CMD ["npm", "run", "start:prod"]
