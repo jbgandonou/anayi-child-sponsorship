@@ -4,7 +4,7 @@
     "description": "Child Sponsorship Application",
     "private": true,
     "scripts": {
-        "build": "cd backend && npm ci && npm run build",
+        "build": "cd backend && npm install --legacy-peer-deps && npm run build",
         "start": "cd backend && npm run start:prod",
         "dev": "cd backend && npm run start:dev"
     },
