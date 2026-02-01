@@ -1,0 +1,6 @@
+[build]
+dockerfile = "backend/Dockerfile"
+context = "backend"
+
+[start]
+cmd = "node dist/main.js"
