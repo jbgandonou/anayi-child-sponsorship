@@ -7,18 +7,46 @@ import { DraftModule } from "./draft/draft.module";
 
 // Helper function to parse DATABASE_URL or use individual variables
 function getDatabaseConfig() {
+  console.log(
+    "🔍 DATABASE_URL:",
+    process.env.DATABASE_URL ? "✅ SET" : "❌ NOT SET",
+  );
+  console.log("🔍 PGHOST:", process.env.PGHOST);
+  console.log("🔍 PGPORT:", process.env.PGPORT);
+  console.log("🔍 PGDATABASE:", process.env.PGDATABASE);
+
+  // If DATABASE_URL is set (Railway), use it
   if (process.env.DATABASE_URL) {
-    // Use DATABASE_URL directly for Railway
+    console.log("✅ Using DATABASE_URL");
     return {
       type: "postgres" as const,
       url: process.env.DATABASE_URL,
       entities: [__dirname + "/**/*.entity{.ts,.js}"],
       synchronize: true,
-      logging: process.env.NODE_ENV === "development",
-      ssl: { rejectUnauthorized: false }, // Railway requires SSL
+      logging: true,
+      ssl: { rejectUnauthorized: false },
     };
   }
-  // Use individual variables for development
+
+  // If individual PG variables are set (Railway backup method)
+  if (process.env.PGHOST) {
+    console.log("✅ Using PGHOST, PGUSER, etc");
+    return {
+      type: "postgres" as const,
+      host: process.env.PGHOST,
+      port: parseInt(process.env.PGPORT || "5432"),
+      username: process.env.PGUSER,
+      password: process.env.PGPASSWORD,
+      database: process.env.PGDATABASE,
+      entities: [__dirname + "/**/*.entity{.ts,.js}"],
+      synchronize: true,
+      logging: true,
+      ssl: { rejectUnauthorized: false },
+    };
+  }
+
+  // Fallback to development config
+  console.log("⚠️  Using development fallback");
   return {
     type: "postgres" as const,
     host: process.env.DATABASE_HOST || "postgres",
